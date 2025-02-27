@@ -1,4 +1,4 @@
-package basic.dto;
+package example.com.basic.dto;
 
 import org.hibernate.validator.constraints.Range;
 

@@ -1,8 +1,8 @@
-package basic.controller;
+package example.com.basic.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import basic.dto.Validation;
+import example.com.basic.dto.Validation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

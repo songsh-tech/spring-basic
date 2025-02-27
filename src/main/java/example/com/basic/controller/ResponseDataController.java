@@ -1,4 +1,4 @@
-package basic.controller;
+package example.com.basic.controller;
 
 import java.util.Date;
 

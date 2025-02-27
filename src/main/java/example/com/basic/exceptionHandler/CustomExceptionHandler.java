@@ -1,4 +1,4 @@
-package basic.exceptionHandler;
+package example.com.basic.exceptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,11 +1,11 @@
-package basic.service.implement;
+package example.com.basic.service.implement;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import basic.service.BasicService;
+import example.com.basic.service.BasicService;
 
 // @Component: 해당 클래스를 Spring Bean으로 등록해서 인스턴스 생성 작업을 Spring에게 위임할 수 있도록 함
 @Component
