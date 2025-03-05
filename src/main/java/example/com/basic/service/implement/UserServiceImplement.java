@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import example.com.basic.dto.GetUserResponseDto;
 import example.com.basic.dto.PostUserRequestDto;
 import example.com.basic.dto.ResponseDto;
 import example.com.basic.entity.UserEntity;
@@ -88,6 +89,40 @@ public class UserServiceImplement implements UserService {
     }
     
     return ResponseDto.success(HttpStatus.CREATED);
+
+  }
+
+  @Override
+  public ResponseEntity<? super GetUserResponseDto> getUser(String userId) {
+    
+    UserEntity userEntity = null;
+
+    try {
+      userEntity = userRepository.findByUserId(userId);
+      if (userEntity == null) return ResponseDto.noExistUser();
+    } catch(Exception exception) {
+      exception.printStackTrace();
+      return ResponseDto.databaseError();
+    }
+    
+    return GetUserResponseDto.success(userEntity);
+    
+  }
+
+  @Override
+  public ResponseEntity<ResponseDto> deletetUser(String userId) {
+    
+    try {
+      UserEntity userEntity = userRepository.findByUserId(userId);
+      if (userEntity == null) return ResponseDto.noExistUser();
+
+      userRepository.delete(userEntity);
+    } catch (Exception exception) {
+      exception.printStackTrace();
+      return ResponseDto.databaseError();
+    }
+    
+    return ResponseDto.success(HttpStatus.OK);
 
   }
 
