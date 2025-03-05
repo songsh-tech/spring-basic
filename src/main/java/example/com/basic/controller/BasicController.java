@@ -41,7 +41,7 @@ public class BasicController {
   public String getMethod() {
     return "GET Method";
   }
-   
+  
   // @PostMapping : RequestMapping을 POST에 한정시킨 어노테이션
   // POST method - 클라이언트가 서버에 데이터를 전송하기위한 메소드
   //             - 클라이언트가 서버에 데이터를 작성하기위한 메소드
