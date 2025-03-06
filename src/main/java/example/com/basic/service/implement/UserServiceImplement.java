@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import example.com.basic.dto.GetUserListResponseDto;
 import example.com.basic.dto.GetUserResponseDto;
+import example.com.basic.dto.PatchUserRequestDto;
 import example.com.basic.dto.PostUserRequestDto;
 import example.com.basic.dto.ResponseDto;
 import example.com.basic.entity.UserEntity;
@@ -93,6 +95,22 @@ public class UserServiceImplement implements UserService {
   }
 
   @Override
+  public ResponseEntity<? super GetUserListResponseDto> getUserList() {
+  
+    List<UserEntity> userEntities = new ArrayList<>();
+
+    try {
+      userEntities = userRepository.findByOrderByUserIdAsc();
+    } catch(Exception exception) {
+      exception.printStackTrace();
+      return ResponseDto.databaseError();
+    }
+
+    return GetUserListResponseDto.success(userEntities);
+    
+  }
+
+  @Override
   public ResponseEntity<? super GetUserResponseDto> getUser(String userId) {
     
     UserEntity userEntity = null;
@@ -107,6 +125,26 @@ public class UserServiceImplement implements UserService {
     
     return GetUserResponseDto.success(userEntity);
     
+  }
+
+  @Override
+  public ResponseEntity<ResponseDto> patchUser(String userId, PatchUserRequestDto dto) {
+    
+    try {
+      UserEntity userEntity = userRepository.findByUserId(userId);
+      if (userEntity == null) return ResponseDto.noExistUser();
+
+      userEntity.setUserName(dto.getUserName());
+      userEntity.setUserAddress(dto.getUserAddress());
+      userRepository.save(userEntity);
+
+    } catch(Exception exception) {
+      exception.printStackTrace();
+      return ResponseDto.databaseError();
+    }
+
+    return ResponseDto.success(HttpStatus.OK);
+
   }
 
   @Override
