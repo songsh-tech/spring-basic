@@ -67,6 +67,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
       // 4. 접근주체의 권한 (리스트) 지정 (선택 사항)
       List<GrantedAuthority> roles = AuthorityUtils.NO_AUTHORITIES;
+
+      // 권한 규칙
+      // 1. 문자열
+      // 2. "ROLE_" 로 시작하는 문자열
       // String role = userEntity.getRole(); 
       // List<GrantedAuthority> roles = new ArrayList<>();
       // roles.add(new SimpleGrantedAuthority(role));
@@ -104,7 +108,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
   private String getToken(HttpServletRequest request) {
 
     // 1. request 객체 header에서 'Authorization' 필드의 값을 가져옴
-    String authorization = request.getHeader("Autorization");
+    String authorization = request.getHeader("Authorization");
 
     // - Authorization 필드값이 존재하는지 확인
     boolean hasAuthorization = StringUtils.hasText(authorization);
