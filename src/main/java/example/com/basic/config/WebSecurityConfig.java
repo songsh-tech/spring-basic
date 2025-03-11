@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import example.com.basic.filter.JwtAuthenticationFilter;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -72,7 +73,7 @@ public class WebSecurityConfig {
       // CSRF 취약점에 대한 대비를 하지 않겠다고 지정
       .csrf(CsrfConfigurer::disable)
 
-      //CORS 정책 설정
+      // CORS 정책 설정
       .cors(cors -> cors.configurationSource(configurationSource()))
 
       // 인가 작업
@@ -81,11 +82,11 @@ public class WebSecurityConfig {
       // - 인증된 모든 클라이언트가 접근할 수 있도록 허용
       // - 인증된 클라이언트 중 특정 권한을 가진 클라이언트만 접근할 수 있도록 허용
       .authorizeHttpRequests(request -> request
-        // requestMachers(): URL 패턴, HTTP 메서드, URL 패턴 + HTTP 메서드 마다 접근 권한을 부여하는 메서드 
+        // requestMachers(): URL 패턴, HTTP 메서드, URL 패턴 + HTTP 메서드 마다 접근 권한을 부여하는 메서드
         // permitAll(): 모든 클라이언트가 접근할 수 있도록 지정
         // authenticated(): 인증된 모든 클라이언트가 접근할 수 있도록 지정
         // hasRole(권한): 특정 권한을 가진 클라이언트만 접근할 수 있도록 지정 (매개변수로 전달하는 권한명은 ROLE_를 제거한 실제 권한명)
-        .requestMatchers("/basic", "/basic/**", "/security/**").permitAll()
+        .requestMatchers("/basic", "/basic/**", "/security", "/security/**").permitAll()
         .requestMatchers(HttpMethod.PATCH).authenticated()
         .requestMatchers(HttpMethod.POST, "/user", "/user/**").hasRole("USER")
         // anyRequest(): 나머지 모든 요청에 대한 처리
@@ -93,14 +94,16 @@ public class WebSecurityConfig {
       )
 
       // 인증 및 인가 과정에서 발생한 예외를 직접 처리
-      .exceptionHandling(exception  -> exception.authenticationEntryPoint(new FailedAuthenticationEntryPoint()))
+      .exceptionHandling(exception -> exception
+        .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
+      )
 
       // 필터 등록
       // addFilterBefore(추가할필터인스턴스, 특정필터클래스객체): 특정 필터 이전에 지정한 필드를 추가
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-      // 설정 완료
-      return  security.build();
+    // 설정 완료
+    return security.build();
 
   }
 
@@ -135,6 +138,7 @@ class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
     response.setContentType("application/json;charset=UTF-8");
     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
     response.getWriter().write("{\"message\": \"인증 및 인가에 실패했습니다.\"}");
+
   }
 
 }

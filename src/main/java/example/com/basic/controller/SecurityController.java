@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import example.com.basic.dto.SignInRequestDto;
 import example.com.basic.dto.SignUpRequestDto;
 import example.com.basic.provider.JwtProvider;
 import example.com.basic.service.SecurityService;
@@ -20,9 +21,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityController {
   
-  private final example.com.basic.service.SecurityService SecurityService;
+  private final SecurityService securityService;
   private final JwtProvider jwtProvider;
-  
+
   @GetMapping("/jwt")
   public String getJwt(
     @RequestParam("name") String name
@@ -30,7 +31,7 @@ public class SecurityController {
     String jwt = jwtProvider.create(name);
     return jwt;
   }
-  
+
   @PostMapping("/jwt")
   public String validateJwt(
     @RequestBody String jwt
@@ -43,8 +44,16 @@ public class SecurityController {
   public ResponseEntity<String> signUp(
     @RequestBody @Valid SignUpRequestDto requestBody
   ) {
-    ResponseEntity<String> response = SecurityService.signUp(requestBody);
+    ResponseEntity<String> response = securityService.signUp(requestBody);
     return response;
   }
-    
+
+  @PostMapping("/sign-in")
+  public ResponseEntity<String> signIn(
+    @RequestBody @Valid SignInRequestDto requestBody
+  ) {
+    ResponseEntity<String> response = securityService.signIn(requestBody);
+    return response;
+  }
+
 }
